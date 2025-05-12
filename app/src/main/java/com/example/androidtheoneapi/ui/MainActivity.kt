@@ -23,11 +23,8 @@ class MainActivity : AppCompatActivity() {
 
         val textView = binding.textView
         val button = binding.button
-        button.setOnClickListener {
-            viewModel.getBooks()
-        }
 
-        viewModel.books.observe(this, Observer { response ->
+        viewModel.movies.observe(this, Observer { response ->
             when (response) {
                 is Resource.Success<*> -> {
                     response.data?.let { responseData ->
@@ -44,5 +41,9 @@ class MainActivity : AppCompatActivity() {
                 is Resource.Loading<*> -> return@Observer
             }
         })
+
+        button.setOnClickListener {
+            viewModel.getMovies()
+        }
     }
 }

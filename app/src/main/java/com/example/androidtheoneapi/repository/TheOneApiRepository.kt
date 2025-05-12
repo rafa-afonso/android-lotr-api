@@ -1,10 +1,13 @@
 package com.example.androidtheoneapi.repository
 
 import com.example.androidtheoneapi.model.response.BookListResponse
+import com.example.androidtheoneapi.model.response.MovieListResponse
 import com.example.androidtheoneapi.util.Resource
 
 interface TheOneApiRepository {
 
     suspend fun getBooks(): Resource<BookListResponse>
+
+    suspend fun getMovies(): Resource<MovieListResponse>
 
 }
