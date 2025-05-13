@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Android The One API</string>
+    <string name="rottenTomatoesScore">%1$s%%</string>
 </resources>
