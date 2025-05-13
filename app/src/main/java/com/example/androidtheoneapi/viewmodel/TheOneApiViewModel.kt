@@ -26,6 +26,7 @@ class TheOneApiViewModel @Inject constructor(
 
     private val _quotes = MutableLiveData<Resource<QuoteListResponse>>()
     val quotes: LiveData<Resource<QuoteListResponse>> = _quotes
+    private var quotesList: QuoteListResponse? = null
     var quotesPage = 1
 
     fun getBooks() {
@@ -56,14 +57,14 @@ class TheOneApiViewModel @Inject constructor(
         if (response is Resource.Success<QuoteListResponse>) {
             response.data?.let { resultResponse ->
                 quotesPage++
-                if (!quotes.isInitialized) {
-                    return Resource.Success(resultResponse)
+                if (quotesList == null) {
+                    quotesList = resultResponse
                 } else {
-                    val oldQuotes = _quotes.value?.data?.quotes
+                    val oldQuotes = quotesList?.quotes
                     val newQuotes = resultResponse.quotes
                     oldQuotes?.addAll(newQuotes)
-                    return Resource.Success(_quotes.value?.data ?: resultResponse)
                 }
+                return Resource.Success(quotesList ?: resultResponse)
             }
         }
         return Resource.Error(response.message ?: "")
