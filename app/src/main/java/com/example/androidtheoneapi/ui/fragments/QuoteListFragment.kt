@@ -73,6 +73,10 @@ class QuoteListFragment : Fragment() {
                         quoteAdapter.differ.submitList(responseData.quotes.toList())
                         val totalPages = responseData.pages
                         isLastPage = viewModel.quotesPage == totalPages
+
+                        if (isLastPage) {
+                            binding.quoteList.setPadding(0, 0, 0, 0)
+                        }
                     }
                 }
 
@@ -94,12 +98,12 @@ class QuoteListFragment : Fragment() {
     var isScrolling = false
 
     private fun hideProgressBar() {
-        // TODO: binding.paginationProgressBar.visibility = View.INVISIBLE
+        binding.paginationProgressBar.visibility = View.GONE
         isLoading = false
     }
 
     private fun showProgressBar() {
-        // TODO: binding.paginationProgressBar.visibility = View.VISIBLE
+        binding.paginationProgressBar.visibility = View.VISIBLE
         isLoading = true
     }
 
