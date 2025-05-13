@@ -10,8 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.androidtheoneapi.R
 import com.example.androidtheoneapi.databinding.FragmentMovieListBinding
 import com.example.androidtheoneapi.util.Resource
 import com.example.androidtheoneapi.viewmodel.TheOneApiViewModel
@@ -43,25 +41,25 @@ class MovieListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_movie_list, container, false)
+        binding = FragmentMovieListBinding.inflate(inflater, container, false)
         movieAdapter = MovieListRecyclerViewAdapter()
 
+        val recyclerView = binding.list
+
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = movieAdapter
+        with(recyclerView) {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
             }
+            adapter = movieAdapter
         }
-        return view
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentMovieListBinding.bind(view)
 
         viewModel.movies.observe(viewLifecycleOwner, Observer { response ->
             when (response) {

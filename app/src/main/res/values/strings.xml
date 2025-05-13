@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Android The One API</string>
-    <string name="rottenTomatoesScore">%1$s%%</string>
+    <string name="rottenTomatoesScore" translatable="false">%1$s%%</string>
+    <string name="movies">Movies</string>
 </resources>
