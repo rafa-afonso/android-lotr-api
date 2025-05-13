@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.androidtheoneapi.databinding.FragmentMovieListBinding
+import com.example.androidtheoneapi.databinding.FragmentQuoteListBinding
 import com.example.androidtheoneapi.util.Resource
 import com.example.androidtheoneapi.viewmodel.TheOneApiViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,10 +19,10 @@ import dagger.hilt.android.AndroidEntryPoint
  * A fragment representing a list of Items.
  */
 @AndroidEntryPoint
-class MovieListFragment : Fragment() {
+class QuoteListFragment : Fragment() {
 
-    private lateinit var binding: FragmentMovieListBinding
-    private lateinit var movieAdapter: MovieListRecyclerViewAdapter
+    private lateinit var binding: FragmentQuoteListBinding
+    private lateinit var quoteAdapter: QuoteListRecyclerViewAdapter
     private val viewModel: TheOneApiViewModel by viewModels()
 
     private var columnCount = 1
@@ -30,7 +30,7 @@ class MovieListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.getMovies()
+        viewModel.getQuotes(1, null)
 
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
@@ -40,11 +40,11 @@ class MovieListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMovieListBinding.inflate(inflater, container, false)
-        movieAdapter = MovieListRecyclerViewAdapter()
+    ): View {
+        binding = FragmentQuoteListBinding.inflate(inflater, container, false)
+        quoteAdapter = QuoteListRecyclerViewAdapter()
 
-        val recyclerView = binding.movieList
+        val recyclerView = binding.quoteList
 
         // Set the adapter
         with(recyclerView) {
@@ -52,7 +52,7 @@ class MovieListFragment : Fragment() {
                 columnCount <= 1 -> LinearLayoutManager(context)
                 else -> GridLayoutManager(context, columnCount)
             }
-            adapter = movieAdapter
+            adapter = quoteAdapter
         }
 
         return binding.root
@@ -61,11 +61,11 @@ class MovieListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.movies.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.quotes.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success<*> -> {
                     response.data?.let { responseData ->
-                        movieAdapter.differ.submitList(responseData.movies.toList())
+                        quoteAdapter.differ.submitList(responseData.quotes.toList())
                     }
                 }
 
@@ -88,7 +88,7 @@ class MovieListFragment : Fragment() {
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
-            MovieListFragment().apply {
+            QuoteListFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }

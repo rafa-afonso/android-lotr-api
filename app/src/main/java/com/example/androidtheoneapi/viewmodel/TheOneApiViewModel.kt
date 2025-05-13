@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidtheoneapi.model.response.BookListResponse
 import com.example.androidtheoneapi.model.response.MovieListResponse
+import com.example.androidtheoneapi.model.response.QuoteListResponse
 import com.example.androidtheoneapi.repository.TheOneApiRepository
 import com.example.androidtheoneapi.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,9 @@ class TheOneApiViewModel @Inject constructor(
     private val _movies = MutableLiveData<Resource<MovieListResponse>>()
     val movies: LiveData<Resource<MovieListResponse>> = _movies
 
+    private val _quotes = MutableLiveData<Resource<QuoteListResponse>>()
+    val quotes: LiveData<Resource<QuoteListResponse>> = _quotes
+
     fun getBooks() {
         _books.postValue(Resource.Loading())
         viewModelScope.launch {
@@ -36,6 +40,14 @@ class TheOneApiViewModel @Inject constructor(
         viewModelScope.launch {
             val response = repository.getMovies()
             _movies.postValue(response)
+        }
+    }
+
+    fun getQuotes(page: Int, limit: Int?) {
+        _quotes.postValue(Resource.Loading())
+        viewModelScope.launch {
+            val response = repository.getQuotesPaginated(page, limit)
+            _quotes.postValue(response)
         }
     }
 
