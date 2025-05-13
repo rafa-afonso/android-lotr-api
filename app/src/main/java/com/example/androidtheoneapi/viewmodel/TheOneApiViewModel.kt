@@ -26,6 +26,7 @@ class TheOneApiViewModel @Inject constructor(
 
     private val _quotes = MutableLiveData<Resource<QuoteListResponse>>()
     val quotes: LiveData<Resource<QuoteListResponse>> = _quotes
+    var quotesPage = 1
 
     fun getBooks() {
         _books.postValue(Resource.Loading())
@@ -43,12 +44,29 @@ class TheOneApiViewModel @Inject constructor(
         }
     }
 
-    fun getQuotes(page: Int, limit: Int?) {
+    fun getQuotes(limit: Int?) {
         _quotes.postValue(Resource.Loading())
         viewModelScope.launch {
-            val response = repository.getQuotesPaginated(page, limit)
-            _quotes.postValue(response)
+            val response = repository.getQuotesPaginated(quotesPage, limit)
+            _quotes.postValue(handleQuotesResponse(response))
         }
+    }
+
+    private fun handleQuotesResponse(response: Resource<QuoteListResponse>): Resource<QuoteListResponse> {
+        if (response is Resource.Success<QuoteListResponse>) {
+            response.data?.let { resultResponse ->
+                quotesPage++
+                if (!quotes.isInitialized) {
+                    return Resource.Success(resultResponse)
+                } else {
+                    val oldQuotes = _quotes.value?.data?.quotes
+                    val newQuotes = resultResponse.quotes
+                    oldQuotes?.addAll(newQuotes)
+                    return Resource.Success(_quotes.value?.data ?: resultResponse)
+                }
+            }
+        }
+        return Resource.Error(response.message ?: "")
     }
 
 }

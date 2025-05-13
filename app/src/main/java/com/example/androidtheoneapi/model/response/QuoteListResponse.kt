@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class QuoteListResponse(
     @SerializedName("docs")
-    val quotes: List<QuoteResponse>,
+    val quotes: MutableList<QuoteResponse>,
     val limit: Int,
     val page: Int,
     val pages: Int,
