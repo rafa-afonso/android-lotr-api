@@ -18,7 +18,9 @@ interface TheOneApiAPI {
     @GET("movie")
     suspend fun getMovies(
         @Query("page")
-        page: Int = 1
+        page: Int = 1,
+        @Query("name!")
+        exclude: String = "/series/i" // remove series results from api call
     ): Response<MovieListResponse>
 
 }
