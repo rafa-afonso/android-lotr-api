@@ -48,6 +48,14 @@ class CharacterListRecyclerViewAdapter :
         val item = differ.currentList[position]
         holder.name.text = item.name
         holder.race.text = item.race
+
+        holder.itemView.apply {
+            setOnClickListener {
+                onItemClickListener?.let { click ->
+                    click(item)
+                }
+            }
+        }
     }
 
     override fun getItemCount(): Int = differ.currentList.size
@@ -60,6 +68,12 @@ class CharacterListRecyclerViewAdapter :
         override fun toString(): String {
             return super.toString() + " '" + name.text + " " + race.text + "'"
         }
+    }
+
+    private var onItemClickListener: ((CharacterResponse) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (CharacterResponse) -> Unit) {
+        onItemClickListener = listener
     }
 
 }

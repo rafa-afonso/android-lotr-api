@@ -9,9 +9,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.androidtheoneapi.R
 import com.example.androidtheoneapi.databinding.FragmentCharacterListBinding
 import com.example.androidtheoneapi.util.Constants.Companion.DEFAULT_PAGINATION_RESULTS_PER_PAGE
 import com.example.androidtheoneapi.util.Resource
@@ -64,6 +66,16 @@ class CharacterListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        characterAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("character", it)
+            }
+            findNavController().navigate(
+                R.id.action_characterListFragment_to_characterWikiWebViewFragment,
+                bundle
+            )
+        }
 
         viewModel.characters.observe(viewLifecycleOwner, Observer { response ->
             when (response) {

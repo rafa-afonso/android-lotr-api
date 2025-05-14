@@ -21,6 +21,20 @@
         android:id="@+id/characterListFragment"
         android:name="com.example.androidtheoneapi.ui.fragments.CharacterListFragment"
         android:label="CharacterListFragment"
-        tools:layout="@layout/fragment_character_list" />
+        tools:layout="@layout/fragment_character_list">
+        <action
+            android:id="@+id/action_characterListFragment_to_characterWikiWebViewFragment"
+            app:destination="@id/characterWikiWebViewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/characterWikiWebViewFragment"
+        android:name="com.example.androidtheoneapi.ui.fragments.CharacterWikiWebViewFragment"
+        android:label="fragment_character_wiki_web_view"
+        tools:layout="@layout/fragment_character_wiki_web_view">
+        <argument
+            android:name="character"
+            app:argType="com.example.androidtheoneapi.model.response.CharacterResponse" />
+    </fragment>
 
 </navigation>
