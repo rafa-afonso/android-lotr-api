@@ -8,33 +8,38 @@
     <fragment
         android:id="@+id/movieListFragment"
         android:name="com.example.androidtheoneapi.ui.fragments.MovieListFragment"
-        android:label="fragment_movie_list"
+        android:label="Movies"
         tools:layout="@layout/fragment_movie_list" />
 
     <fragment
         android:id="@+id/quoteListFragment"
         android:name="com.example.androidtheoneapi.ui.fragments.QuoteListFragment"
-        android:label="QuoteListFragment"
+        android:label="Quotes"
         tools:layout="@layout/fragment_quote_list" />
 
-    <fragment
-        android:id="@+id/characterListFragment"
-        android:name="com.example.androidtheoneapi.ui.fragments.CharacterListFragment"
-        android:label="CharacterListFragment"
-        tools:layout="@layout/fragment_character_list">
-        <action
-            android:id="@+id/action_characterListFragment_to_characterWikiWebViewFragment"
-            app:destination="@id/characterWikiWebViewFragment" />
-    </fragment>
+    <navigation
+        android:id="@+id/character_graph"
+        app:startDestination="@id/characterListFragment">
 
-    <fragment
-        android:id="@+id/characterWikiWebViewFragment"
-        android:name="com.example.androidtheoneapi.ui.fragments.CharacterWikiWebViewFragment"
-        android:label="fragment_character_wiki_web_view"
-        tools:layout="@layout/fragment_character_wiki_web_view">
-        <argument
-            android:name="character"
-            app:argType="com.example.androidtheoneapi.model.response.CharacterResponse" />
-    </fragment>
+        <fragment
+            android:id="@+id/characterListFragment"
+            android:name="com.example.androidtheoneapi.ui.fragments.CharacterListFragment"
+            android:label="Characters"
+            tools:layout="@layout/fragment_character_list">
+            <action
+                android:id="@+id/action_characterListFragment_to_characterWikiWebViewFragment"
+                app:destination="@id/characterWikiWebViewFragment" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/characterWikiWebViewFragment"
+            android:name="com.example.androidtheoneapi.ui.fragments.CharacterWikiWebViewFragment"
+            android:label="Character Wiki"
+            tools:layout="@layout/fragment_character_wiki_web_view">
+            <argument
+                android:name="character"
+                app:argType="com.example.androidtheoneapi.model.response.CharacterResponse" />
+        </fragment>
+    </navigation>
 
 </navigation>
