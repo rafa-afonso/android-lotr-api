@@ -28,8 +28,8 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@color/primary_color"
+        android:layout_height="wrap_content"
+        android:background="@color/primary_text_color"
         app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
