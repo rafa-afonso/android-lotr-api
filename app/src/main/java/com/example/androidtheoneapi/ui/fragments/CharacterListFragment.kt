@@ -115,9 +115,7 @@ class CharacterListFragment : Fragment() {
             job = MainScope().launch {
                 delay(SEARCH_TIME_DELAY)
                 editable?.let {
-                    if (editable.toString().isNotEmpty()) {
-                        viewModel.getSearchCharacters(null, editable.toString())
-                    }
+                    viewModel.getSearchCharacters(name = editable.toString())
                 }
             }
         }
@@ -156,7 +154,7 @@ class CharacterListFragment : Fragment() {
                 isNoErrors && isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
 
             if (shouldPaginate) {
-                viewModel.getCharacters()
+                viewModel.getCharacters(name = binding.characterSearchEdit.text.toString())
                 isScrolling = false
             }
         }
