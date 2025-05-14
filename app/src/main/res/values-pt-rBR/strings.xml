@@ -3,4 +3,5 @@
     <string name="app_name">Android The One API</string>
     <string name="movies">Filmes</string>
     <string name="quotes">Citações</string>
+    <string name="characters">Personagens</string>
 </resources>

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidtheoneapi.model.response.BookListResponse
+import com.example.androidtheoneapi.model.response.CharacterListResponse
 import com.example.androidtheoneapi.model.response.MovieListResponse
 import com.example.androidtheoneapi.model.response.QuoteListResponse
 import com.example.androidtheoneapi.repository.TheOneApiRepository
@@ -28,6 +29,11 @@ class TheOneApiViewModel @Inject constructor(
     val quotes: LiveData<Resource<QuoteListResponse>> = _quotes
     private var quotesList: QuoteListResponse? = null
     var quotesPage = 1
+
+    private val _characters = MutableLiveData<Resource<CharacterListResponse>>()
+    val characters: LiveData<Resource<CharacterListResponse>> = _characters
+    private var charactersList: CharacterListResponse? = null
+    var charactersPage = 1
 
     fun getBooks() {
         _books.postValue(Resource.Loading())
@@ -53,6 +59,14 @@ class TheOneApiViewModel @Inject constructor(
         }
     }
 
+    fun getCharacters(limit: Int?) {
+        _characters.postValue(Resource.Loading())
+        viewModelScope.launch {
+            val response = repository.getCharactersPaginated(charactersPage, limit)
+            _characters.postValue(handleCharactersResponse(response))
+        }
+    }
+
     private fun handleQuotesResponse(response: Resource<QuoteListResponse>): Resource<QuoteListResponse> {
         if (response is Resource.Success<QuoteListResponse>) {
             response.data?.let { resultResponse ->
@@ -65,6 +79,23 @@ class TheOneApiViewModel @Inject constructor(
                     oldQuotes?.addAll(newQuotes)
                 }
                 return Resource.Success(quotesList ?: resultResponse)
+            }
+        }
+        return Resource.Error(response.message ?: "")
+    }
+
+    private fun handleCharactersResponse(response: Resource<CharacterListResponse>): Resource<CharacterListResponse>? {
+        if (response is Resource.Success<CharacterListResponse>) {
+            response.data?.let { resultResponse ->
+                charactersPage++
+                if (charactersList == null) {
+                    charactersList = resultResponse
+                } else {
+                    val oldCharacters = charactersList?.characters
+                    val newCharacters = resultResponse.characters
+                    oldCharacters?.addAll(newCharacters)
+                }
+                return Resource.Success(charactersList ?: resultResponse)
             }
         }
         return Resource.Error(response.message ?: "")

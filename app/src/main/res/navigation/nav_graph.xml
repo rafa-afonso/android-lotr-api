@@ -17,4 +17,10 @@
         android:label="QuoteListFragment"
         tools:layout="@layout/fragment_quote_list" />
 
+    <fragment
+        android:id="@+id/characterListFragment"
+        android:name="com.example.androidtheoneapi.ui.fragments.CharacterListFragment"
+        android:label="CharacterListFragment"
+        tools:layout="@layout/fragment_character_list" />
+
 </navigation>

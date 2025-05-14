@@ -11,4 +11,9 @@
         android:icon="@drawable/outline_aod_tablet_24"
         android:title="@string/quotes" />
 
+    <item
+        android:id="@+id/characterListFragment"
+        android:icon="@drawable/outline_contacts_24"
+        android:title="@string/characters" />
+
 </menu>
