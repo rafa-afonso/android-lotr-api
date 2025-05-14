@@ -11,20 +11,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/uncial_antiqua"
-        android:text="@string/movies"
+        android:text="@string/quotes"
         android:textColor="@color/primary_text_color"
         android:textSize="24sp"
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/movie_list"
-        android:name="com.example.androidtheoneapi.ui.fragments.MovieListFragment"
+        android:id="@+id/quote_list"
+        android:name="com.example.androidtheoneapi.ui.fragments.QuoteListFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:paddingBottom="50dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.fragments.MovieListFragment"
-        tools:listitem="@layout/fragment_movie_item" />
+        tools:context=".ui.fragments.QuoteListFragment"
+        tools:listitem="@layout/fragment_quote_item" />
+
+    <ProgressBar
+        android:id="@+id/paginationProgressBar"
+        style="?attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:visibility="gone" />
 
 </LinearLayout>

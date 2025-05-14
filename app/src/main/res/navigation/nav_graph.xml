@@ -10,4 +10,11 @@
         android:name="com.example.androidtheoneapi.ui.fragments.MovieListFragment"
         android:label="fragment_movie_list"
         tools:layout="@layout/fragment_movie_list" />
+
+    <fragment
+        android:id="@+id/quoteListFragment"
+        android:name="com.example.androidtheoneapi.ui.fragments.QuoteListFragment"
+        android:label="QuoteListFragment"
+        tools:layout="@layout/fragment_quote_list" />
+
 </navigation>

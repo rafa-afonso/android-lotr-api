@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidtheoneapi.model.response.BookListResponse
 import com.example.androidtheoneapi.model.response.MovieListResponse
+import com.example.androidtheoneapi.model.response.QuoteListResponse
 import com.example.androidtheoneapi.repository.TheOneApiRepository
 import com.example.androidtheoneapi.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,11 @@ class TheOneApiViewModel @Inject constructor(
     private val _movies = MutableLiveData<Resource<MovieListResponse>>()
     val movies: LiveData<Resource<MovieListResponse>> = _movies
 
+    private val _quotes = MutableLiveData<Resource<QuoteListResponse>>()
+    val quotes: LiveData<Resource<QuoteListResponse>> = _quotes
+    private var quotesList: QuoteListResponse? = null
+    var quotesPage = 1
+
     fun getBooks() {
         _books.postValue(Resource.Loading())
         viewModelScope.launch {
@@ -37,6 +43,31 @@ class TheOneApiViewModel @Inject constructor(
             val response = repository.getMovies()
             _movies.postValue(response)
         }
+    }
+
+    fun getQuotes(limit: Int?) {
+        _quotes.postValue(Resource.Loading())
+        viewModelScope.launch {
+            val response = repository.getQuotesPaginated(quotesPage, limit)
+            _quotes.postValue(handleQuotesResponse(response))
+        }
+    }
+
+    private fun handleQuotesResponse(response: Resource<QuoteListResponse>): Resource<QuoteListResponse> {
+        if (response is Resource.Success<QuoteListResponse>) {
+            response.data?.let { resultResponse ->
+                quotesPage++
+                if (quotesList == null) {
+                    quotesList = resultResponse
+                } else {
+                    val oldQuotes = quotesList?.quotes
+                    val newQuotes = resultResponse.quotes
+                    oldQuotes?.addAll(newQuotes)
+                }
+                return Resource.Success(quotesList ?: resultResponse)
+            }
+        }
+        return Resource.Error(response.message ?: "")
     }
 
 }

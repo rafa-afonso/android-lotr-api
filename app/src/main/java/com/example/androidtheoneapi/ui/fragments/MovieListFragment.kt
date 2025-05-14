@@ -44,7 +44,7 @@ class MovieListFragment : Fragment() {
         binding = FragmentMovieListBinding.inflate(inflater, container, false)
         movieAdapter = MovieListRecyclerViewAdapter()
 
-        val recyclerView = binding.list
+        val recyclerView = binding.movieList
 
         // Set the adapter
         with(recyclerView) {
