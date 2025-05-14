@@ -22,5 +22,13 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        binding.bottomNavigationView.setOnItemReselectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.character_graph -> {
+                    navController.popBackStack(R.id.characterListFragment, false)
+                }
+            }
+        }
     }
 }
