@@ -60,13 +60,15 @@ class DefaultTheOneApiRepository @Inject constructor(
 
     override suspend fun getCharactersPaginated(
         page: Int,
-        limit: Int?
+        limit: Int?,
+        name: String?
     ): Resource<CharacterListResponse> {
         return try {
             val response =
                 theOneApiAPI.getCharactersPaginated(
                     page,
-                    limit ?: DEFAULT_PAGINATION_RESULTS_PER_PAGE
+                    limit ?: DEFAULT_PAGINATION_RESULTS_PER_PAGE,
+                    name ?: ""
                 )
             if (response.isSuccessful) {
                 response.body()?.let {

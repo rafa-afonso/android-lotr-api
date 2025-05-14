@@ -14,5 +14,9 @@ interface TheOneApiRepository {
 
     suspend fun getQuotesPaginated(page: Int, limit: Int?): Resource<QuoteListResponse>
 
-    suspend fun getCharactersPaginated(page: Int, limit: Int?): Resource<CharacterListResponse>
+    suspend fun getCharactersPaginated(
+        page: Int,
+        limit: Int?,
+        name: String?
+    ): Resource<CharacterListResponse>
 }

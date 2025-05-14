@@ -39,7 +39,9 @@ interface TheOneApiAPI {
         @Query("page")
         page: Int = 1,
         @Query("limit")
-        pageLimit: Int = DEFAULT_PAGINATION_RESULTS_PER_PAGE
+        pageLimit: Int = DEFAULT_PAGINATION_RESULTS_PER_PAGE,
+        @Query("name")
+        name: String = ""
     ): Response<CharacterListResponse>
 
 }

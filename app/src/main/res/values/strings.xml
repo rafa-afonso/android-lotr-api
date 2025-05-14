@@ -4,4 +4,5 @@
     <string name="movies">Movies</string>
     <string name="quotes">Quotes</string>
     <string name="characters">Characters</string>
+    <string name="search_character">Search character...</string>
 </resources>

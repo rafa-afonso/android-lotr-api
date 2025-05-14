@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -16,9 +17,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidtheoneapi.R
 import com.example.androidtheoneapi.databinding.FragmentCharacterListBinding
 import com.example.androidtheoneapi.util.Constants.Companion.DEFAULT_PAGINATION_RESULTS_PER_PAGE
+import com.example.androidtheoneapi.util.Constants.Companion.SEARCH_TIME_DELAY
 import com.example.androidtheoneapi.util.Resource
 import com.example.androidtheoneapi.viewmodel.TheOneApiViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * A fragment representing a list of Items.
@@ -35,7 +41,7 @@ class CharacterListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.getCharacters(null)
+        viewModel.getCharacters()
 
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
@@ -102,6 +108,19 @@ class CharacterListFragment : Fragment() {
                 is Resource.Loading<*> -> showProgressBar()
             }
         })
+
+        var job: Job? = null
+        binding.characterSearchEdit.addTextChangedListener { editable ->
+            job?.cancel()
+            job = MainScope().launch {
+                delay(SEARCH_TIME_DELAY)
+                editable?.let {
+                    if (editable.toString().isNotEmpty()) {
+                        viewModel.getSearchCharacters(null, editable.toString())
+                    }
+                }
+            }
+        }
     }
 
     var isError = false
@@ -137,7 +156,7 @@ class CharacterListFragment : Fragment() {
                 isNoErrors && isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
 
             if (shouldPaginate) {
-                viewModel.getCharacters(null)
+                viewModel.getCharacters()
                 isScrolling = false
             }
         }

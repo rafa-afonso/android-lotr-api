@@ -34,6 +34,8 @@ class TheOneApiViewModel @Inject constructor(
     val characters: LiveData<Resource<CharacterListResponse>> = _characters
     private var charactersList: CharacterListResponse? = null
     var charactersPage = 1
+    var newSearchQuery: String? = null
+    var oldSearchQuery: String? = null
 
     fun getBooks() {
         _books.postValue(Resource.Loading())
@@ -59,11 +61,22 @@ class TheOneApiViewModel @Inject constructor(
         }
     }
 
-    fun getCharacters(limit: Int?) {
+    fun getSearchCharacters(limit: Int? = null, name: String) {
+        val regexTreatedName = "/$name/i"
+        newSearchQuery = regexTreatedName
+        getCharacters(limit, regexTreatedName)
+    }
+
+    fun getCharacters(limit: Int? = null, name: String = "") {
         _characters.postValue(Resource.Loading())
         viewModelScope.launch {
-            val response = repository.getCharactersPaginated(charactersPage, limit)
-            _characters.postValue(handleCharactersResponse(response))
+            val response = repository.getCharactersPaginated(charactersPage, limit, name)
+            val handledCharacterResponse = if (name.isBlank()) {
+                handleCharactersResponse(response)
+            } else {
+                handleSearchCharacterResponse(response)
+            }
+            _characters.postValue(handledCharacterResponse!!)
         }
     }
 
@@ -96,6 +109,25 @@ class TheOneApiViewModel @Inject constructor(
                     oldCharacters?.addAll(newCharacters)
                 }
                 return Resource.Success(charactersList ?: resultResponse)
+            }
+        }
+        return Resource.Error(response.message ?: "")
+    }
+
+    private fun handleSearchCharacterResponse(response: Resource<CharacterListResponse>): Resource<CharacterListResponse> {
+        if (response is Resource.Success<CharacterListResponse>) {
+            response.data?.let { searchResponse ->
+                if (charactersList == null || newSearchQuery != oldSearchQuery) {
+                    charactersPage = 1
+                    oldSearchQuery = newSearchQuery
+                    charactersList = searchResponse
+                } else {
+                    charactersPage++
+                    val oldCharacters = charactersList?.characters
+                    val newCharacters = searchResponse.characters
+                    oldCharacters?.addAll(newCharacters)
+                }
+                return Resource.Success(charactersList ?: searchResponse)
             }
         }
         return Resource.Error(response.message ?: "")
